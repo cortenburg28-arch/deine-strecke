@@ -1,52 +1,58 @@
 # Deine Strecke
 
-Ein kleines 3D-Eisenbahnspiel im Browser, gebaut mit [Three.js](https://threejs.org/) und [Vite](https://vite.dev/).
+A small 3D railway game for the browser, built with [Three.js](https://threejs.org/) and [Vite](https://vite.dev/).
 
-Züge fahren zwischen Minen und einem großen Bahnhof hin und her, bringen Kohle, Eisenerz und Golderz ins Lager, und mit dem Erz baust du dein Netz aus.
+Trains run back and forth between mines and a large station, bringing coal, iron ore and gold ore into the warehouse. You spend that ore to grow your network.
 
-## Starten
+## About this project
+
+The creativity and inventiveness behind this game are far above the standard. The code is built in a very smart way, and overall everything about this project is very good.
+
+## Getting started
 
 ```bash
 npm install
 npm run dev
 ```
 
-Danach im Browser <http://localhost:5173/> öffnen.
+Then open <http://localhost:5173/> in your browser.
 
-Für eine fertige Version: `npm run build` (Ausgabe in `dist/`).
+For a production build: `npm run build` (output goes to `dist/`).
 
-## Spielidee
+## Gameplay
 
-- **Erz statt Münzen:** Alles kostet Kohle, Eisenerz oder Golderz aus dem Lager am Bahnhof.
-- **Strecken:** Die kurze Kohlestrecke gibt es von Anfang an. Dazu kommen das Gleis zur Eisenmine (4 Kohle) und die Goldstrecke (4 Kohle + 4 Eisenerz). Die kurze Kohlestrecke bleibt immer erhalten.
-- **Züge:** Jedes Modell kann mehrmals gekauft werden. Jeder Zug bekommt sein eigenes Ziel (Kohle, Eisen oder Gold), und die Kamera kann jedem Zug folgen.
-- **Kein Durchfahren:** Züge halten Abstand, warten voreinander und setzen an Weichen zurück, wenn sie sich gegenseitig blockieren. In jeden Weichenbereich darf immer nur ein Zug einfahren.
-- **Bahnhofsgleise:** Der Bahnhof kann bis zu drei Gleise mit eigener Entladestelle bekommen. Die Züge nehmen automatisch das freieste Gleis.
-- **Schmelzhütte:** Gießt Stahl (2 Kohle + 1 Eisenerz) und Goldbarren (2 Kohle + 1 Golderz).
-- **Bahnhof ausbauen:** Mit Stahl und Goldbarren entstehen Güterschuppen und Schnellrampe, die Züge entladen dann schneller.
-- **Speichern:** Der Spielstand wird automatisch im Browser gespeichert (`localStorage`).
+- **Ore instead of coins:** Everything costs coal, iron ore or gold ore from the station warehouse.
+- **Lines:** The short coal line is there from the start. You can add the line to the iron mine (4 coal) and the gold line (4 coal + 4 iron ore). The short coal line always stays.
+- **Trains:** Every model can be bought more than once. Each train gets its own destination (coal, iron or gold), and the camera can follow any train.
+- **No driving through each other:** Trains keep their distance, wait for each other and back up at switches when they block each other. Only one train at a time may enter a switch area.
+- **Station tracks:** The station can get up to three tracks, each with its own unloading pit. Trains automatically pick the least busy track.
+- **Smelter:** Casts steel (2 coal + 1 iron ore) and gold bars (2 coal + 1 gold ore).
+- **Station upgrades:** Steel and gold bars build a goods shed and a fast ramp, so trains unload faster.
+- **Saving:** Progress is saved automatically in the browser (`localStorage`).
 
-## Züge
+## Trains
 
-| Zug | Seltenheit | Ladung | Preis |
+| Train | Rarity | Capacity | Price |
 | --- | --- | --- | --- |
-| Dampflok | Gewöhnlich | 1 | erste gratis, jede weitere 3 Kohle |
-| Diesellok | Ungewöhnlich | 2 | 4 Kohle |
-| Erz-Zug | Selten | 3 | 3 Kohle + 3 Eisenerz |
-| Schwere Güterlok | Episch | 4 | 4 Kohle + 6 Eisenerz |
-| Goldzug | Legendär | 5 | 4 Golderz + 2 Eisenerz |
+| Steam locomotive (Dampflok) | Common | 1 | first one free, each extra one 3 coal |
+| Diesel locomotive (Diesellok) | Uncommon | 2 | 4 coal |
+| Ore train (Erz-Zug) | Rare | 3 | 3 coal + 3 iron ore |
+| Heavy freight locomotive (Schwere Güterlok) | Epic | 4 | 4 coal + 6 iron ore |
+| Gold train (Goldzug) | Legendary | 5 | 4 gold ore + 2 iron ore |
 
-## Steuerung
+## Controls
 
-- **Maus ziehen:** Kamera drehen
-- **Scrollen:** zoomen
-- **A/D oder ←/→:** an der Strecke entlang fahren
-- **F:** Zug folgen
-- **B:** das nächste bezahlbare Bauprojekt bauen
+- **Drag with the mouse:** rotate the camera
+- **Scroll:** zoom
+- **A/D or ←/→:** move along the track
+- **F:** follow a train
+- **B:** build the next affordable project
 
-## Aufbau
+The in-game interface is in German.
 
-- `index.html`: Oberfläche (Lager, Bau-Menü, Zugliste, Kamera-Leiste)
-- `src/main.js`: die ganze Spiellogik, Strecken, Züge und 3D-Welt
-- `src/style.css`: Aussehen der Oberfläche
-- `PLAN.md`: der ursprüngliche Bauplan des Spiels
+## Project structure
+
+- `index.html`: the interface (warehouse, build menu, train list, camera bar)
+- `src/main.js`: all game logic, tracks, trains and the 3D world
+- `src/style.css`: styling of the interface
+- `PLAN.md`: the original build plan for the game
