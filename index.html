@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deine Strecke</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div class="side">
+      <div class="hud">
+        <div class="stat">Lager: <strong id="stock">leer</strong></div>
+        <div class="stat">Kamera folgt: <strong id="train-name">Dampflok</strong></div>
+        <div class="stat">Dessen Ladung: <strong id="cargo">leer (0/1)</strong></div>
+      </div>
+      <section class="build-panel" aria-label="Bauen">
+        <h2>Bauen</h2>
+        <div id="build-iron-card" class="build-item">
+          <div class="build-title">Gleis zur Eisenmine · 4 Kohle</div>
+          <div class="build-desc">Längere Strecke zur Eisenmine. Die kurze Kohlestrecke bleibt.</div>
+          <div class="build-progress"><span id="build-iron-bar"></span></div>
+          <div id="build-iron-status" class="build-status"></div>
+          <button id="build-iron" class="build-button" type="button"></button>
+        </div>
+        <div id="build-gold-card" class="build-item">
+          <div class="build-title">Goldstrecke · 4 Kohle + 4 Eisenerz</div>
+          <div class="build-desc">Eigene Strecke zur fernen Goldmine und zurück zum Bahnhof.</div>
+          <div class="build-progress"><span id="build-gold-bar"></span></div>
+          <div id="build-gold-status" class="build-status"></div>
+          <button id="build-gold" class="build-button" type="button"></button>
+        </div>
+        <div id="build-smelter-card" class="build-item">
+          <div class="build-title">Schmelzhütte · 6 Kohle + 3 Eisenerz</div>
+          <div class="build-desc">Macht aus Erz Stahl und Goldbarren. Die brauchst du, um den Bahnhof auszubauen.</div>
+          <div class="build-progress"><span id="build-smelter-bar"></span></div>
+          <div id="build-smelter-status" class="build-status"></div>
+          <button id="build-smelter" class="build-button" type="button"></button>
+          <div id="smelter-jobs" hidden>
+            <button id="smelt-steel" class="build-button" type="button"></button>
+            <button id="smelt-goldbar" class="build-button" type="button"></button>
+          </div>
+        </div>
+        <div id="build-platform-card" class="build-item">
+          <div class="build-title" id="platform-title">Bahnhofsgleise</div>
+          <div class="build-desc" id="platform-desc"></div>
+          <div class="build-progress"><span id="build-platform-bar"></span></div>
+          <div id="build-platform-status" class="build-status"></div>
+          <button id="build-platform" class="build-button" type="button"></button>
+        </div>
+        <div id="build-station-card" class="build-item">
+          <div class="build-title" id="station-title">Bahnhof</div>
+          <div class="build-desc" id="station-desc">Züge entladen hier Kohle, Eisen und Gold.</div>
+          <div class="build-progress"><span id="build-station-bar"></span></div>
+          <div id="build-station-status" class="build-status"></div>
+          <button id="build-station" class="build-button" type="button"></button>
+        </div>
+      </section>
+      <section class="train-panel" aria-label="Züge">
+        <h2>Züge: jeder fährt sein Ziel</h2>
+        <div id="train-list"></div>
+      </section>
+    </div>
+    <div class="camera-bar">
+      <button id="cam-station" type="button">Bahnhof</button>
+      <button id="cam-coal" type="button">Kohlemine</button>
+      <button id="cam-iron" type="button" hidden>Eisenmine</button>
+      <button id="cam-gold" type="button" hidden>Goldmine</button>
+      <button id="cam-follow" type="button">Zug folgen</button>
+      <label>
+        Strecke
+        <input id="track-slider" type="range" min="0" max="273" step="0.1" value="0" />
+      </label>
+    </div>
+    <p id="message" class="message"></p>
+    <p class="hint">
+      Ziehen: drehen · Scrollen: zoomen · A/D oder ←/→: an der Strecke entlang · F: Zug folgen · B: bauen
+    </p>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

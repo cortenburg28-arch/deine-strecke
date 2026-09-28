@@ -1,0 +1,345 @@
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #9eb8c9;
+}
+
+canvas {
+  display: block;
+}
+
+.hud,
+.build-panel,
+.train-panel,
+.camera-bar,
+.message,
+.hint {
+  margin: 0;
+  border-radius: 8px;
+  color: #1c2830;
+  background: rgba(255, 255, 255, 0.86);
+  font: 14px/1.4 system-ui, sans-serif;
+}
+
+.camera-bar,
+.message,
+.hint,
+.side {
+  position: fixed;
+}
+
+.side {
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 280px;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 96px);
+  overflow-y: auto;
+}
+
+.hud {
+  padding: 8px 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.build-panel {
+  padding: 10px 12px;
+  border: 2px solid #d4a017;
+}
+
+.train-panel {
+  padding: 10px 12px;
+  border: 2px solid #2f5a3f;
+}
+
+.build-panel h2,
+.train-panel h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.build-item + .build-item {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #d8dde1;
+}
+
+.build-title {
+  font-weight: 700;
+}
+
+.build-desc,
+.build-status {
+  font-size: 13px;
+  color: #3d4a53;
+}
+
+.build-status {
+  margin: 4px 0 6px;
+}
+
+.build-progress {
+  height: 8px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #e2e6e9;
+}
+
+.build-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #d4a017;
+  transition: width 0.3s;
+}
+
+#smelter-jobs {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+#smelter-jobs[hidden] {
+  display: none;
+}
+
+.build-button {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #1f4a2f;
+  border-radius: 6px;
+  background: #2f7a47;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.build-button.waiting {
+  border-color: #b9bec2;
+  background: #eceef0;
+  color: #4d5860;
+  font-weight: 600;
+}
+
+.build-button:disabled {
+  border-color: #cfd4d8;
+  background: #f1f3f4;
+  color: #8a949b;
+  font-weight: 400;
+  cursor: default;
+}
+
+.build-item.done .build-progress span {
+  background: #2f7a47;
+}
+
+.build-item.locked .build-title {
+  color: #6a747b;
+}
+
+.build-panel.ready {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.45);
+  }
+}
+
+.target-choice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.train-item + .train-item {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #d8dde1;
+}
+
+.train-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.train-rarity {
+  padding: 0 5px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #fff;
+  background: #7d878e;
+}
+
+.rarity-diesel .train-rarity {
+  background: #2f7a47;
+}
+
+.rarity-erz .train-rarity {
+  background: #2a5da8;
+}
+
+.rarity-schwer .train-rarity {
+  background: #7b3fa8;
+}
+
+.rarity-goldzug .train-rarity {
+  background: #b8860b;
+}
+
+.train-cap {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.train-desc {
+  font-size: 12px;
+  color: #3d4a53;
+}
+
+.train-button,
+.train-follow {
+  margin-top: 4px;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.train-instance {
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.train-instance.running {
+  box-shadow: inset 0 0 0 2px #2f5a3f;
+}
+
+.train-instance-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.train-dest {
+  margin-top: 6px;
+}
+
+.train-cargo {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #3d4a53;
+}
+
+.train-dest[hidden],
+.train-cargo[hidden],
+.train-follow[hidden] {
+  display: none;
+}
+
+.train-item.running .train-button:disabled {
+  border-color: #2f5a3f;
+  background: #dcebdf;
+  color: #1f4a2f;
+  font-weight: 700;
+}
+
+.target-choice {
+  flex-wrap: wrap;
+}
+
+.target-choice button[hidden],
+.camera-bar button[hidden],
+.build-button[hidden] {
+  display: none;
+}
+
+.target-choice button,
+.train-follow,
+.camera-bar button {
+  padding: 4px 10px;
+  border: 1px solid #9aa7b0;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.target-choice button.active,
+.train-follow.active,
+.camera-bar button.active {
+  border-color: #2f5a3f;
+  background: #2f5a3f;
+  color: #fff;
+}
+
+.camera-bar {
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: calc(100% - 330px);
+  padding: 6px 8px;
+}
+
+.camera-bar label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.camera-bar input {
+  width: 140px;
+}
+
+.message {
+  bottom: 84px;
+  left: 50%;
+  padding: 8px 14px;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  max-width: calc(100% - 48px);
+  text-align: center;
+}
+
+.message.visible {
+  opacity: 1;
+}
+
+.message.good {
+  background: rgba(220, 245, 222, 0.96);
+}
+
+.message.bad {
+  background: rgba(252, 224, 220, 0.96);
+}
+
+.hint {
+  left: 16px;
+  bottom: 16px;
+  padding: 8px 12px;
+  margin-right: 16px;
+  pointer-events: none;
+}
