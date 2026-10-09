@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Three Projects — Automated TikToks, FaceLook &amp; Deine Strecke</title>
+<style>
+  :root {
+    --ink: #1d1d1f;
+    --muted: #6e6e73;
+    --line: #e3e3e8;
+    --bg: #fbfbfd;
+    --panel: #ffffff;
+    --accent: #0071e3;
+    --coal: #3a3a3c;
+    --iron: #8d8d92;
+    --gold: #d4a017;
+    --soft: #f2f2f6;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.45;
+    font-size: 17px;
+    overflow-x: hidden;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img, svg { display: block; max-width: 100%; }
+
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 200;
+  }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background: rgba(251, 251, 253, 0.82);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand { font-weight: 600; font-size: 15px; letter-spacing: -0.01em; color: var(--ink); }
+  .nav-links { display: flex; gap: 22px; }
+  .nav-links a { color: var(--muted); font-size: 13px; white-space: nowrap; }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 72px 0 48px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+  h1 {
+    font-size: 64px;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    margin: 0 0 16px;
+  }
+  .lede {
+    max-width: 560px;
+    font-size: 21px;
+    color: var(--muted);
+    margin: 0 0 40px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .tile {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 22px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: inherit;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .tile:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.06); text-decoration: none; }
+  .tile strong { display: block; font-size: 22px; letter-spacing: -0.02em; margin-top: 16px; }
+  .tile span { color: var(--muted); font-size: 14px; }
+
+  .scroll-cue {
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .chevron {
+    width: 22px;
+    height: 22px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    transform: rotate(45deg) translateY(-4px);
+    animation: bob 1.4s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: rotate(45deg) translateY(-6px); }
+    50% { transform: rotate(45deg) translateY(2px); }
+  }
+
+  section.block { padding: 96px 0; scroll-margin-top: 52px; }
+  h2 {
+    font-size: 44px;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0 0 10px;
+  }
+  .one {
+    font-size: 19px;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 0 32px;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    animation: none;
+  }
+  .reveal.in {
+    animation: rise 0.8s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .reveal.d1 { animation-delay: 0.08s; }
+  .reveal.d2 { animation-delay: 0.16s; }
+  .reveal.d3 { animation-delay: 0.24s; }
+  @keyframes rise {
+    to { opacity: 1; transform: none; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 28px;
+  }
+
+  .flow-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .flow-list li {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+  }
+  .flow-list li:first-child { border-top: 0; padding-top: 0; }
+  .flow-list b {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--soft);
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .flow-list strong { display: block; letter-spacing: -0.02em; }
+  .flow-list p { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+  .caption { margin: 12px 0 0; color: var(--muted); font-size: 15px; }
+  .prose { max-width: 720px; }
+  .prose p { margin: 0 0 14px; }
+  .draw-line {
+    height: 3px;
+    margin: 18px 8px 0;
+    background: var(--line);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .draw-line i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+  }
+  .reveal.in .draw-line i {
+    width: 100%;
+    transition: width 1.3s cubic-bezier(.16,1,.3,1);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .stat {
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    background: var(--ink);
+    color: white;
+  }
+  .stat b {
+    display: block;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+  .stat span { color: rgba(255,255,255,0.72); font-size: 14px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip {
+    background: var(--soft);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; }
+  .rounds { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .round {
+    background: var(--soft);
+    border-radius: 18px;
+    padding: 16px;
+  }
+  .round h3 { margin: 0 0 12px; font-size: 16px; }
+  .faces { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .face {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: #e4e4ea;
+  }
+  .face.on { outline: 3px solid var(--accent); background: #d6e8ff; }
+  .names { display: grid; gap: 8px; }
+  .name {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .name.on { background: var(--accent); color: white; }
+
+  .mechs { display: grid; gap: 10px; }
+  .mech {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 12px;
+    align-items: center;
+    background: var(--soft);
+    border-radius: 16px;
+    padding: 12px;
+  }
+  .mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: white;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .mech strong { display: block; font-size: 15px; }
+  .mech span { color: var(--muted); font-size: 13px; }
+
+  .note {
+    margin-top: 16px;
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 16px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .scrub { height: 230vh; position: relative; }
+  .scrub-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 32px;
+    align-items: center;
+    padding: 72px 24px 32px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .beat {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 8px;
+  }
+  #beat-title, #vid-title {
+    font-size: 48px;
+    letter-spacing: -0.03em;
+    margin: 0 0 12px;
+  }
+  #beat-copy, #vid-copy { color: var(--muted); font-size: 18px; margin: 0; max-width: 420px; }
+  .beat.video { color: var(--accent); }
+  .video-scrub { height: 300vh; }
+  #make-video .scrub-pin,
+  #face-play .scrub-pin {
+    grid-template-columns: minmax(240px, 38vw) auto;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(28px, 4vw, 56px);
+  }
+  #vid-title, #face-title { font-size: clamp(34px, 4.6vh, 52px); }
+  #vid-copy, #face-copy { font-size: clamp(20px, 2.8vh, 28px); line-height: 1.4; max-width: 28ch; }
+  .phone-wrap { display: flex; justify-content: center; }
+  .film-steps { margin-top: 22px; width: min(100%, 32ch); }
+  .phone {
+    position: relative;
+    height: min(740px, calc(100vh - 96px));
+    width: auto;
+    aspect-ratio: 393 / 852;
+    flex: 0 0 auto;
+    background: #0b0b0d;
+    border-radius: 54px;
+    padding: 8px;
+    box-shadow:
+      0 28px 70px rgba(0,0,0,0.18),
+      inset 0 0 0 1px #3a3a3c;
+  }
+  .phone::before,
+  .phone::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    width: 3px;
+    background: #2c2c2e;
+    border-radius: 2px 0 0 2px;
+  }
+  .phone::before { top: 16%; height: 3.6%; }
+  .phone::after { top: 22%; height: 7.2%; }
+  .screen {
+    position: relative;
+    height: 100%;
+    border-radius: 46px;
+    overflow: hidden;
+    background: #111;
+    color: white;
+    container-type: size;
+  }
+  .island {
+    position: absolute;
+    z-index: 8;
+    top: 1.8%;
+    left: 50%;
+    width: 32%;
+    height: 4.4%;
+    transform: translateX(-50%);
+    background: #000;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+  .layer {
+    position: absolute;
+    inset: 0;
+    padding: 14% 8% 8%;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .layer.on { opacity: 1; }
+  .hook-card, .script-layer { background: #f5f5f7; color: #1d1d1f; }
+  .kicker-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  .hook-card p, .script-layer .hook { margin: 0; font-size: clamp(20px, 8.5cqw, 32px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+  .script-layer .line { margin: 0.7em 0 0; font-size: clamp(18px, 6.4cqw, 26px); line-height: 1.35; color: #6e6e73; opacity: 0.25; transition: opacity 0.25s ease; }
+  .script-layer .line.show { opacity: 1; color: #1d1d1f; }
+  .gameplay {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.45)),
+      repeating-linear-gradient(90deg, #3d7a4a 0 18px, #4e8d58 18px 36px);
+  }
+  .gameplay span {
+    position: absolute;
+    left: 16px;
+    top: 56px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+  }
+  .wave { display: flex; align-items: flex-end; gap: 4px; background: #111; }
+  .wave i {
+    flex: 1;
+    height: var(--h);
+    background: #5ac8fa;
+    border-radius: 3px 3px 0 0;
+    transform-origin: bottom;
+    transform: scaleY(0.15);
+  }
+  .wave i { transition: transform 0.2s linear; }
+  .playhead {
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    width: 2px;
+    background: white;
+    left: 8%;
+  }
+  .caps { display: flex; align-items: flex-end; justify-content: center; background: transparent; pointer-events: none; }
+  .caps p { margin: 0 0 10%; text-align: center; font-size: clamp(20px, 9cqw, 34px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; text-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+  .caps span { opacity: 0.45; }
+  .caps span.on { opacity: 1; color: #ffe14a; }
+  .learn { background: rgba(0,0,0,0.55); display: flex; flex-direction: column; justify-content: flex-end; }
+  .learn svg { width: 100%; height: 90px; }
+  .learn path { fill: none; stroke: white; stroke-width: 3; stroke-linecap: round; }
+  .learn p { margin: 8px 0 6px; font-size: 14px; font-weight: 600; }
+  .film-steps {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    width: min(420px, 100%);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .film-steps span { text-align: center; }
+  .film-steps span.on { color: var(--accent); }
+  .quiz { background: #f4f4f6; color: #1d1d1f; display: flex; flex-direction: column; gap: 12px; }
+  .quiz h3 { margin: 0; font-size: clamp(20px, 7.2cqw, 30px); letter-spacing: -0.03em; }
+  .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; min-height: 0; }
+  .q-face { border-radius: 16px; background: #d7d7de; position: relative; }
+  .q-face.pick { outline: 4px solid var(--accent); background: #d6e8ff; }
+  .q-face b { position: absolute; left: 8px; right: 8px; bottom: 8px; font-size: clamp(12px, 3.8cqw, 16px); }
+  .q-names { display: grid; gap: 8px; }
+  .q-name { background: white; border-radius: 14px; padding: 14px 16px; font-weight: 700; font-size: clamp(18px, 5.8cqw, 24px); }
+  .q-name.pick { background: var(--accent); color: white; }
+  .portrait { flex: 1; border-radius: 18px; background: #d6e8ff; min-height: 28%; }
+  .wait-track { height: 22px; background: #e3e3e8; border-radius: 99px; overflow: hidden; }
+  .wait-track i { display: block; height: 100%; width: 100%; background: var(--accent); }
+  .wait-label { margin: 0; font-size: clamp(28px, 10cqw, 42px); font-weight: 700; letter-spacing: -0.03em; }
+  .route-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 12px;
+  }
+  #route-svg { width: 100%; height: auto; }
+
+  .charts { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; }
+  .chart h3, .costs h3 { margin: 0 0 18px; font-size: 18px; }
+  .row {
+    display: grid;
+    grid-template-columns: 92px 1fr 28px;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .track {
+    height: 14px;
+    background: var(--soft);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .fill {
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: var(--accent);
+  }
+  .reveal.in .fill {
+    width: var(--w);
+    transition: width 1s cubic-bezier(.16,1,.3,1);
+  }
+  .fill.gold { background: var(--gold); }
+  .fill.coal { background: var(--coal); }
+
+  .cost-list { display: grid; gap: 10px; }
+  .cost {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    font-size: 14px;
+  }
+  .pips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+  .pip {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--coal);
+  }
+  .pip.iron { background: var(--iron); }
+  .pip.gold { background: var(--gold); }
+
+  footer {
+    padding: 48px 24px 72px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (max-width: 860px) {
+    h1 { font-size: 42px; }
+    h2, #beat-title, #vid-title, #face-title { font-size: 34px; }
+    .hero-grid, .stats, .split, .charts, .scrub-pin {
+      grid-template-columns: 1fr;
+    }
+    #make-video .scrub-pin,
+    #face-play .scrub-pin { grid-template-columns: minmax(0, 1fr) auto; }
+    #vid-title, #face-title { font-size: 30px; }
+    #vid-copy, #face-copy { font-size: 20px; }
+    .hero { min-height: auto; padding-top: 48px; }
+    .scrub, .video-scrub { height: 210vh; }
+  }
+  @media (max-width: 640px) {
+    #make-video .scrub-pin,
+    #face-play .scrub-pin { grid-template-columns: 1fr; }
+    .phone { height: min(520px, 64vh); }
+  }
+  @media (max-height: 620px) {
+    .scrub { height: auto; }
+    .scrub-pin { position: relative; height: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; animation: none; }
+    .chevron { animation: none; }
+    .fill, .draw-line i { width: var(--w, 100%); transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-brand">Projects</span>
+    <div class="nav-links">
+      <a href="#tiktok">TikToks</a>
+      <a href="#facelook">FaceLook</a>
+      <a href="#strecke">Deine Strecke</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow reveal">Three systems</p>
+    <h1 class="reveal d1">Built from scratch.</h1>
+    <p class="lede reveal d2">Three programs, each built around one loop: a video that learns from its own viewers, a school game solved from the page itself, and a railway paid for with the ore the trains bring back.</p>
+    <div class="hero-grid">
+      <a class="tile reveal d1" href="#tiktok">
+        <svg viewBox="0 0 160 64" width="160" height="64" aria-hidden="true">
+          <g fill="#0071e3">
+            <rect x="8" y="28" width="8" height="28" rx="3"/>
+            <rect x="24" y="16" width="8" height="40" rx="3"/>
+            <rect x="40" y="34" width="8" height="22" rx="3"/>
+            <rect x="56" y="8" width="8" height="48" rx="3"/>
+            <rect x="72" y="22" width="8" height="34" rx="3"/>
+            <rect x="88" y="12" width="8" height="44" rx="3"/>
+            <rect x="104" y="30" width="8" height="26" rx="3"/>
+            <rect x="120" y="18" width="8" height="38" rx="3"/>
+            <rect x="136" y="26" width="8" height="30" rx="3"/>
+          </g>
+        </svg>
+        <div><strong>TikToks</strong><span>A local pipeline writes, voices, and edits a short video, then reads the drop-off to write the next one.</span></div>
+      </a>
+      <a class="tile reveal d2" href="#facelook">
+        <svg viewBox="0 0 120 64" width="120" height="64" aria-hidden="true">
+          <rect x="4" y="4" width="24" height="24" rx="6" fill="#d6e8ff" stroke="#0071e3" stroke-width="2"/>
+          <rect x="34" y="4" width="24" height="24" rx="6" fill="#e4e4ea"/>
+          <rect x="64" y="4" width="24" height="24" rx="6" fill="#e4e4ea"/>
+          <rect x="94" y="4" width="24" height="24" rx="6" fill="#e4e4ea"/>
+          <rect x="4" y="36" width="114" height="22" rx="8" fill="#1d1d1f"/>
+        </svg>
+        <div><strong>FaceLook</strong><span>Hero Mode shows a name or a face. The script clicks the match as soon as the question is stable.</span></div>
+      </a>
+      <a class="tile reveal d3" href="#strecke">
+        <svg viewBox="0 0 160 64" width="160" height="64" aria-hidden="true">
+          <path d="M8 46 C 40 46, 50 18, 80 18 S 120 46, 152 28" fill="none" stroke="#1d1d1f" stroke-width="3"/>
+          <circle cx="18" cy="44" r="5" fill="#3a3a3c"/>
+          <circle cx="80" cy="18" r="5" fill="#8d8d92"/>
+          <circle cx="148" cy="29" r="5" fill="#d4a017"/>
+        </svg>
+        <div><strong>Deine Strecke</strong><span>Trains haul coal, iron, and gold into the station. That ore is what pays for the next line.</span></div>
+      </a>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"><i class="chevron"></i> Scroll</div>
+  </div>
+</header>
+
+<section class="block" id="tiktok">
+  <div class="wrap">
+    <p class="eyebrow reveal">01</p>
+    <h2 class="reveal d1">Automated TikToks</h2>
+    <div class="prose reveal d2">
+      <p>Faceless story videos are a script, a synthetic voice, word-by-word captions, and background footage. Doing that by hand means writing, recording, timing every word, cutting, then guessing why people left.</p>
+      <p>This program runs that whole job on my Mac. Scroll through the phone: one example video is picked, written, spoken, captioned, cut, and then the drop-off is turned into a rule for the next one. Text, voice, alignment, and the cut all stay on the machine.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scrub video-scrub" id="make-video">
+  <div class="scrub-pin">
+    <div>
+      <p class="beat video" id="vid-kicker">01 · Idea</p>
+      <h2 id="vid-title">Pick the test</h2>
+      <p id="vid-copy">Before anything is written, the program picks a category, a hook, and a voice. Those three are saved so later videos can be compared.</p>
+      <div class="film-steps" id="film-steps">
+        <span>Idea</span>
+        <span>Script</span>
+        <span>Voice</span>
+        <span>Captions</span>
+        <span>Edit</span>
+        <span>Learn</span>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone" aria-label="A vertical video being assembled">
+        <div class="screen">
+          <div class="island" aria-hidden="true"></div>
+          <div class="layer gameplay" id="layer-game"><span>Gameplay, cropped to 9:16</span></div>
+          <div class="layer hook-card on" id="layer-hook">
+            <p class="kicker-label">Hook</p>
+            <p>I never told anyone this.</p>
+          </div>
+          <div class="layer script-layer" id="layer-script">
+            <p class="kicker-label">Script · 75–85s</p>
+            <p class="hook">I never told anyone this.</p>
+            <p class="line" data-line>Five pitches. One is kept.</p>
+            <p class="line" data-line>The slow middle gets cut.</p>
+            <p class="line" data-line>The rulebook from older videos is already in the prompt.</p>
+          </div>
+          <div class="layer wave" id="layer-wave">
+            <div class="playhead" id="playhead"></div>
+          </div>
+          <div class="layer caps" id="layer-caps">
+            <p id="cap-line"></p>
+          </div>
+          <div class="layer learn" id="layer-learn">
+            <svg viewBox="0 0 200 80" aria-hidden="true">
+              <path id="retain-path" pathLength="1" d="M8 18 C 50 18, 70 24, 100 36 S 150 68, 192 72"/>
+            </svg>
+            <p id="learn-note">People left on this sentence.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="facelook">
+  <div class="wrap">
+    <p class="eyebrow reveal">02</p>
+    <h2 class="reveal d1">FaceLook Hero Mode</h2>
+    <div class="prose reveal d2">
+      <p>FaceLook is a school site for learning names and faces. Hero Mode is a long run of questions. A wrong answer or a slow one costs health, so a high score means hundreds of correct clicks without a miss.</p>
+      <p>Scroll the phone. A name round and a face round play out, then the script reacts, skips the pause, and waits until the photos match the name.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scrub video-scrub" id="face-play">
+  <div class="scrub-pin">
+    <div>
+      <p class="beat video" id="face-kicker">01 · Name</p>
+      <h2 id="face-title">Name, then the face</h2>
+      <p id="face-copy">The round shows one name and four photos. Blue is the photo whose file is named after that person. That filename is the answer, so the script clicks it.</p>
+      <div class="film-steps" id="face-steps">
+        <span>Name</span>
+        <span>Face</span>
+        <span>Watch</span>
+        <span>Pause</span>
+        <span>Frame</span>
+      </div>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone" aria-label="FaceLook questions on a phone">
+        <div class="screen">
+          <div class="island" aria-hidden="true"></div>
+          <div class="layer quiz on" id="face-name">
+            <h3>Find Jordan</h3>
+            <div class="q-grid">
+              <div class="q-face"><b>Alex.png</b></div>
+              <div class="q-face pick"><b>Jordan.png</b></div>
+              <div class="q-face"><b>Sam.png</b></div>
+              <div class="q-face"><b>Riley.png</b></div>
+            </div>
+          </div>
+          <div class="layer quiz" id="face-photo">
+            <h3>Who is this?</h3>
+            <div class="portrait"></div>
+            <div class="q-names">
+              <div class="q-name">Alex</div>
+              <div class="q-name pick">Jordan</div>
+              <div class="q-name">Sam</div>
+              <div class="q-name">Riley</div>
+            </div>
+          </div>
+          <div class="layer quiz" id="face-watch">
+            <h3 id="watch-prompt">New question</h3>
+            <div class="q-grid" id="watch-grid">
+              <div class="q-face" data-watch="0"><b>Alex.png</b></div>
+              <div class="q-face" data-watch="1"><b>Jordan.png</b></div>
+              <div class="q-face" data-watch="2"><b>Sam.png</b></div>
+              <div class="q-face" data-watch="3"><b>Riley.png</b></div>
+            </div>
+          </div>
+          <div class="layer quiz" id="face-pause">
+            <h3>Pause between questions</h3>
+            <p class="wait-label" id="wait-label">300ms</p>
+            <div class="wait-track"><i id="wait-fill"></i></div>
+            <p class="caption">The bar is the game’s wait. Scrolling runs it down to nothing.</p>
+          </div>
+          <div class="layer quiz" id="face-frame">
+            <h3>Find Jordan</h3>
+            <div class="q-grid">
+              <div class="q-face" id="frame-a"><b id="file-a">Alex.png</b></div>
+              <div class="q-face" id="frame-b"><b id="file-b">…</b></div>
+              <div class="q-face"><b>Sam.png</b></div>
+              <div class="q-face"><b>Riley.png</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <p class="note reveal">Looking at how those photos loaded also showed the whole student and teacher directory was reachable without a login. That was written up and reported so the school could put the files behind authentication. The score itself was typed in by hand on the normal submit screen.</p>
+  </div>
+</section>
+
+<section class="scrub" id="strecke">
+  <div class="scrub-pin">
+    <div>
+      <p class="beat" id="beat-kicker">Railway</p>
+      <h2 id="beat-title">Deine Strecke</h2>
+      <p id="beat-copy">Scroll and the train moves from the coal mine, past iron, out to gold. Each mine pays the next piece of track. The train unloads at the station, and that stock is the only money in the game.</p>
+      <p class="one" style="margin-top:18px"><a href="https://github.com/cortenburg28-arch/deine-strecke">github.com/cortenburg28-arch/deine-strecke</a></p>
+    </div>
+    <div class="route-card">
+      <svg id="route-svg" viewBox="0 0 760 280" role="img" aria-label="A train moving from the coal mine toward the station">
+        <path id="route-path" d="M70 190 C 180 190, 200 80, 320 80 S 500 200, 560 170 S 700 90, 700 90" fill="none" stroke="#d2d2d7" stroke-width="14" stroke-linecap="round"/>
+        <path d="M70 190 C 180 190, 200 80, 320 80 S 500 200, 560 170 S 700 90, 700 90" fill="none" stroke="#1d1d1f" stroke-width="3" stroke-linecap="round"/>
+        <g id="mines" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="15" font-weight="600">
+          <circle cx="70" cy="190" r="9" fill="#3a3a3c"/>
+          <text x="70" y="224" text-anchor="middle" fill="#1d1d1f">Coal mine</text>
+          <text x="70" y="244" text-anchor="middle" fill="#6e6e73" font-size="13" font-weight="500">start</text>
+          <circle cx="320" cy="80" r="9" fill="#8d8d92"/>
+          <text x="320" y="52" text-anchor="middle" fill="#1d1d1f">Iron mine</text>
+          <text x="320" y="32" text-anchor="middle" fill="#6e6e73" font-size="13" font-weight="500">costs 4 coal</text>
+          <circle cx="700" cy="90" r="9" fill="#d4a017"/>
+          <text x="688" y="46" text-anchor="end" fill="#1d1d1f">Gold mine</text>
+          <text x="688" y="64" text-anchor="end" fill="#6e6e73" font-size="13" font-weight="500">4 coal + 4 iron</text>
+        </g>
+        <g id="train" transform="translate(70 190)">
+          <rect x="-22" y="-16" width="28" height="16" rx="3" fill="#1d1d1f"/>
+          <rect x="8" y="-12" width="16" height="12" rx="2" fill="#c4a15a"/>
+          <circle cx="-14" cy="2" r="3.5" fill="#1d1d1f"/>
+          <circle cx="-4" cy="2" r="3.5" fill="#1d1d1f"/>
+          <circle cx="16" cy="2" r="3.5" fill="#1d1d1f"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="yard">
+  <div class="wrap">
+    <p class="eyebrow reveal">The yard</p>
+    <h2 class="reveal d1">What the ore buys</h2>
+    <div class="prose reveal d2">
+      <p>A longer train is worth it because one trip carries more. The gold train holds five loads. The first steam locomotive holds one, so the same mine takes five trips. Bars below are loads per trip, not speed.</p>
+      <p>At the station the train waits while it unloads. A goods shed, paid in steel, cuts that wait from 3.5 seconds to 2. A fast ramp, paid in steel and a gold bar, cuts it to 1 second. Steel and gold bars come from the smelter: 2 coal + 1 iron ore, or 2 coal + 1 gold ore.</p>
+    </div>
+    <div class="charts">
+      <div class="panel chart reveal">
+        <h3>Loads per trip</h3>
+        <div class="row"><span>Steam</span><div class="track"><div class="fill" style="--w:20%"></div></div><span>1</span></div>
+        <div class="row"><span>Diesel</span><div class="track"><div class="fill" style="--w:40%"></div></div><span>2</span></div>
+        <div class="row"><span>Ore</span><div class="track"><div class="fill" style="--w:60%"></div></div><span>3</span></div>
+        <div class="row"><span>Heavy</span><div class="track"><div class="fill" style="--w:80%"></div></div><span>4</span></div>
+        <div class="row"><span>Gold</span><div class="track"><div class="fill gold" style="--w:100%"></div></div><span>5</span></div>
+        <p class="caption">The bar is how much one train carries in a single trip. The gold train fills the whole bar.</p>
+        <h3 style="margin-top:28px">Seconds waiting at the station</h3>
+        <div class="row"><span>Start</span><div class="track"><div class="fill coal" style="--w:100%"></div></div><span>3.5s</span></div>
+        <div class="row"><span>Shed</span><div class="track"><div class="fill coal" style="--w:57%"></div></div><span>2s</span></div>
+        <div class="row"><span>Ramp</span><div class="track"><div class="fill coal" style="--w:29%"></div></div><span>1s</span></div>
+        <p class="caption">Shorter bar means the train leaves sooner. The ramp is the fully upgraded station.</p>
+      </div>
+      <div class="panel costs reveal d1">
+        <h3>Price of the next train</h3>
+        <div class="cost-list" id="costs"></div>
+        <p class="note">Each dot is one unit already in the warehouse. Dark is coal, gray is iron ore, yellow is gold ore. The first steam locomotive is free. The row above is only the price of another one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Projects · local video, a school game, and a browser railway.</div>
+</footer>
+
+<script>
+const progress = document.getElementById("progress");
+const train = document.getElementById("train");
+const route = document.getElementById("route-path");
+const scrub = document.getElementById("strecke");
+const videoScrub = document.getElementById("make-video");
+const faceScrub = document.getElementById("face-play");
+const faceKicker = document.getElementById("face-kicker");
+const faceTitle = document.getElementById("face-title");
+const faceCopy = document.getElementById("face-copy");
+const faceSteps = [...document.querySelectorAll("#face-steps span")];
+const watchTiles = [...document.querySelectorAll("[data-watch]")];
+const waitFill = document.getElementById("wait-fill");
+const waitLabel = document.getElementById("wait-label");
+const frameB = document.getElementById("frame-b");
+const fileB = document.getElementById("file-b");
+const kicker = document.getElementById("beat-kicker");
+const title = document.getElementById("beat-title");
+const copy = document.getElementById("beat-copy");
+const vidKicker = document.getElementById("vid-kicker");
+const vidTitle = document.getElementById("vid-title");
+const vidCopy = document.getElementById("vid-copy");
+const length = route.getTotalLength();
+const retain = document.getElementById("retain-path");
+const playhead = document.getElementById("playhead");
+const capLine = document.getElementById("cap-line");
+const filmSteps = [...document.querySelectorAll("#film-steps span")];
+const scriptLines = [...document.querySelectorAll("[data-line]")];
+const words = ["I", "never", "told", "anyone", "this."];
+capLine.innerHTML = words.map((word) => `<span>${word}</span>`).join(" ");
+const wave = document.getElementById("layer-wave");
+[40, 70, 50, 90, 65, 100, 55, 80, 45, 95, 60, 85, 50, 75].forEach((h) => {
+  const bar = document.createElement("i");
+  bar.style.setProperty("--h", `${h}%`);
+  wave.insertBefore(bar, playhead);
+});
+const bars = [...wave.querySelectorAll("i")];
+
+const beats = [
+  { at: 0, k: "Coal mine", t: "Where you start", d: "The map opens with this short line and one steam locomotive. It loads one unit of coal and brings it back to the station." },
+  { at: 0.28, k: "Iron mine", t: "Bought with 4 coal", d: "Four coal from the warehouse pays for this line. The coal line stays, so one train can keep feeding coal while another fetches iron." },
+  { at: 0.55, k: "Gold mine", t: "The far line", d: "This one costs 4 coal and 4 iron ore. Gold ore is what later pays for the gold train and for gold bars at the smelter." },
+  { at: 0.78, k: "The station", t: "Several trains, one yard", d: "Trains are not allowed through each other. They keep a gap, back up when they meet, and only one may enter a switch. At the station each one takes the quietest platform." }
+];
+
+const costs = [
+  ["Another steam locomotive", "3 coal", [["c", 3]]],
+  ["Diesel locomotive", "4 coal", [["c", 4]]],
+  ["Ore train", "3 coal + 3 iron", [["c", 3], ["i", 3]]],
+  ["Heavy freight locomotive", "4 coal + 6 iron", [["c", 4], ["i", 6]]],
+  ["Gold train", "4 gold + 2 iron", [["g", 4], ["i", 2]]]
+];
+const costList = document.getElementById("costs");
+for (const [name, price, pips] of costs) {
+  const row = document.createElement("div");
+  row.className = "cost";
+  const dots = pips.map(([kind, n]) => `<i class="pip ${kind === "i" ? "iron" : kind === "g" ? "gold" : ""}"></i>`.repeat(n)).join("");
+  row.innerHTML = `<span>${name}<br><span style="color:#6e6e73">${price}</span></span><span class="pips">${dots}</span>`;
+  costList.appendChild(row);
+}
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) entry.target.classList.add("in");
+  });
+}, { threshold: 0.22 });
+document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+const videoBeats = [
+  { at: 0, k: "01 · Idea", t: "Pick the test", d: "Before anything is written, the program picks a category, a hook, and a voice. Those three are saved so later videos can be compared." },
+  { at: 0.16, k: "02 · Script", t: "Write the script", d: "A local model pitches five ideas and keeps one. The script is 75–85 seconds of speech, and the rules from older videos are already in the prompt." },
+  { at: 0.33, k: "03 · Voice", t: "Speak it", d: "Kokoro reads the script into a WAV file on this Mac. If the take is too short, the script is extended and spoken again." },
+  { at: 0.5, k: "04 · Captions", t: "Time every word", d: "faster-whisper hears the audio. Those times are locked onto the original spelling, so a misheard word never appears on screen." },
+  { at: 0.66, k: "05 · Edit", t: "Cut the frame", d: "FFmpeg crops gameplay to 1080×1920, burns the captions onto the picture, and mixes the voice. This is the file you could post." },
+  { at: 0.83, k: "06 · Learn", t: "Read the drop-off", d: "After it is posted, the second people leave is mapped to the sentence spoken then. That finding becomes a rule for the next script." }
+];
+
+const faceBeats = [
+  { at: 0, k: "01 · Name", t: "Name, then the face", d: "The round shows one name and four photos. Blue is the photo whose file is named after that person. That filename is the answer, so the script clicks it." },
+  { at: 0.22, k: "02 · Face", t: "Face, then the name", d: "The other round shows one photo and four names. Blue is the name that matches the photo’s filename. Same match, the other way around." },
+  { at: 0.44, k: "03 · Watch", t: "Click when it changes", d: "The script watches the page. As soon as the next question is painted, it reads the new name and the new filenames. It does not wait on a timer." },
+  { at: 0.66, k: "04 · Pause", t: "The 300ms wait drops out", d: "The game pauses about 300ms between questions. The script runs that pause immediately, so the next question appears at once." },
+  { at: 0.84, k: "05 · Frame", t: "Wait until it settles", d: "The name often updates one frame before the photos. The click waits until the name and all four filenames stay the same for two frames." }
+];
+
+function renderFace(p) {
+  const beat = [...faceBeats].reverse().find((item) => p >= item.at) || faceBeats[0];
+  if (faceKicker.textContent !== beat.k) {
+    faceKicker.textContent = beat.k;
+    faceTitle.textContent = beat.t;
+    faceCopy.textContent = beat.d;
+  }
+  const step = faceBeats.findIndex((item) => item === beat);
+  faceSteps.forEach((label, index) => label.classList.toggle("on", index <= step));
+
+  showLayer("face-name", p < 0.22);
+  showLayer("face-photo", p >= 0.22 && p < 0.44);
+  showLayer("face-watch", p >= 0.44 && p < 0.66);
+  showLayer("face-pause", p >= 0.66 && p < 0.84);
+  showLayer("face-frame", p >= 0.84);
+
+  const watchP = Math.min(1, Math.max(0, (p - 0.44) / 0.22));
+  const watchPick = Math.min(3, Math.floor(watchP * 4));
+  watchTiles.forEach((tile) => tile.classList.toggle("pick", Number(tile.dataset.watch) === watchPick));
+
+  const pauseP = Math.min(1, Math.max(0, (p - 0.66) / 0.18));
+  const ms = Math.round(300 * (1 - pauseP));
+  waitFill.style.width = `${(ms / 300) * 100}%`;
+  waitLabel.textContent = `${ms}ms`;
+
+  const settled = p >= 0.93;
+  frameB.classList.toggle("pick", settled);
+  fileB.textContent = settled ? "Jordan.png" : "…";
+}
+
+function placeTrain(p) {
+  const point = route.getPointAtLength(Math.max(0, Math.min(1, p)) * length);
+  const ahead = route.getPointAtLength(Math.min(length, Math.max(0, p) * length + 8));
+  const angle = Math.atan2(ahead.y - point.y, ahead.x - point.x) * 180 / Math.PI;
+  train.setAttribute("transform", `translate(${point.x} ${point.y}) rotate(${angle})`);
+}
+
+function scrubProgress(section) {
+  const pin = section.querySelector(".scrub-pin");
+  const sticky = getComputedStyle(pin).position === "sticky";
+  const rect = section.getBoundingClientRect();
+  const total = section.offsetHeight - innerHeight;
+  const passed = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+  return { sticky, p: total > 0 ? passed / total : 1 };
+}
+
+function showLayer(id, on) {
+  document.getElementById(id).classList.toggle("on", on);
+}
+
+function renderVideo(p) {
+  const beat = [...videoBeats].reverse().find((item) => p >= item.at) || videoBeats[0];
+  if (vidKicker.textContent !== beat.k) {
+    vidKicker.textContent = beat.k;
+    vidTitle.textContent = beat.t;
+    vidCopy.textContent = beat.d;
+  }
+  const step = videoBeats.findIndex((item) => item === beat);
+  filmSteps.forEach((label, index) => label.classList.toggle("on", index <= step));
+
+  showLayer("layer-hook", p < 0.16);
+  showLayer("layer-script", p >= 0.16 && p < 0.33);
+  showLayer("layer-wave", p >= 0.33 && p < 0.5);
+  showLayer("layer-game", p >= 0.66);
+  showLayer("layer-caps", p >= 0.5 && p < 0.83);
+  showLayer("layer-learn", p >= 0.83);
+
+  const scriptP = Math.min(1, Math.max(0, (p - 0.16) / 0.17));
+  scriptLines.forEach((line, index) => line.classList.toggle("show", scriptP > (index + 0.2) / scriptLines.length));
+
+  const voiceP = Math.min(1, Math.max(0, (p - 0.33) / 0.17));
+  bars.forEach((bar, index) => {
+    const grown = Math.min(1, Math.max(0, voiceP * bars.length - index));
+    bar.style.transform = `scaleY(${0.12 + 0.88 * grown})`;
+  });
+  playhead.style.left = `${8 + voiceP * 78}%`;
+
+  const capP = Math.min(1, Math.max(0, (p - 0.5) / 0.16));
+  const active = Math.min(words.length - 1, Math.floor(capP * words.length));
+  [...capLine.children].forEach((span, index) => span.classList.toggle("on", index <= active));
+
+  const learnP = Math.min(1, Math.max(0, (p - 0.83) / 0.17));
+  retain.style.strokeDasharray = "1";
+  retain.style.strokeDashoffset = String(1 - learnP);
+}
+
+function onScroll() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+
+  const trainState = scrubProgress(scrub);
+  const trainP = !trainState.sticky ? 0.62 : reduce ? 0.72 : trainState.p;
+  placeTrain(trainP);
+  if (trainState.sticky && !reduce) {
+    const beat = [...beats].reverse().find((item) => trainP >= item.at) || beats[0];
+    if (kicker.textContent !== beat.k) {
+      kicker.textContent = beat.k;
+      title.textContent = beat.t;
+      copy.textContent = beat.d;
+    }
+  }
+
+  const videoState = scrubProgress(videoScrub);
+  const videoP = !videoState.sticky ? 0.7 : reduce ? 0.92 : videoState.p;
+  renderVideo(videoP);
+
+  const faceState = scrubProgress(faceScrub);
+  const faceP = !faceState.sticky ? 0.3 : reduce ? 0.9 : faceState.p;
+  renderFace(faceP);
+}
+
+placeTrain(0);
+onScroll();
+addEventListener("scroll", onScroll, { passive: true });
+addEventListener("resize", onScroll);
+</script>
+</body>
+</html>
