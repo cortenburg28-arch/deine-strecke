@@ -1,0 +1,23 @@
+3D models in this folder — all licensed CC0 1.0 Universal (public domain)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+express_loco.glb   "train-electric-bullet-a"   Kenney (kenney.nl) — Train Kit
+                   https://kenney.nl/assets/train-kit
+                   (colormap texture embedded into the GLB)
+minecart.glb       "ore-cart"                  3dassets.dev
+                   https://cdn.3dassets.dev/assets/24488/v1/model.glb
+crusher.glb        "factory-conveyor-network-machine-crusher" (jaw crusher)   3dassets.dev
+                   https://cdn.3dassets.dev/assets/26295/v1/model.glb
+headframe.glb      "shaft-headframe"           3dassets.dev
+                   https://cdn.3dassets.dev/assets/24477/v1/model.glb
+tunnel_portal.glb  "tunnel-portal"             3dassets.dev
+                   https://cdn.3dassets.dev/assets/13692/v1/model.glb
+mine_entrance.glb  "mine-entrance"             3dassets.dev
+                   https://cdn.3dassets.dev/assets/28767/v1/model.glb
+rock_a.glb         "rock_largeD"               Kenney (kenney.nl) — Nature Kit
+rock_b.glb         "rock_tallB"                Kenney (kenney.nl) — Nature Kit
+rock_c.glb         "rock_largeF"               Kenney (kenney.nl) — Nature Kit
+                   https://kenney.nl/assets/nature-kit
+                   (recolored to rock 0x7c7867 / grass 0x5f8a3c, unlit extension removed)
+
+Modifications: metalness capped at 0.3 on the 3dassets.dev models (no environment map in game).

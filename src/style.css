@@ -115,6 +115,60 @@ canvas {
   display: none;
 }
 
+.smelter-upgrade {
+  display: grid;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.smelter-upgrade[hidden] {
+  display: none;
+}
+
+.smelter-auto {
+  display: grid;
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid #d8dde1;
+  border-radius: 6px;
+  background: #f6f8f9;
+}
+
+.auto-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auto-plan {
+  display: grid;
+  grid-template-columns: 1fr 28px 28px 28px;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.auto-plan button {
+  height: 24px;
+  border: 1px solid #9aa7b0;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auto-count {
+  text-align: center;
+  font-weight: 700;
+}
+
+.smelter-auto .build-status {
+  margin: 0;
+}
+
 .build-button {
   width: 100%;
   padding: 7px 10px;
@@ -199,8 +253,195 @@ canvas {
   background: #7b3fa8;
 }
 
+.rarity-kaiser .train-rarity {
+  color: #e6b422;
+}
 .rarity-goldzug .train-rarity {
   background: #b8860b;
+}
+
+.rarity-blitz .train-rarity {
+  background: linear-gradient(90deg, #d3122a, #7b3fa8, #1fa6d6);
+  background-size: 200% 100%;
+  animation: mythic-shift 3s linear infinite;
+  box-shadow: 0 0 6px rgba(51, 204, 255, 0.6);
+}
+
+.rarity-diamant .train-rarity {
+  color: #10324a;
+  background: linear-gradient(90deg, #e9fbff, #8fdcff, #ffffff, #9fd0ff, #e9fbff);
+  background-size: 200% 100%;
+  animation: mythic-shift 2.2s linear infinite;
+  box-shadow: 0 0 6px rgba(120, 210, 255, 0.85);
+}
+
+.diamond-card .build-progress span {
+  background: linear-gradient(90deg, #5fc4e8, #b9ecff);
+}
+
+.diamond-flow {
+  margin: 2px 0 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #eaf6fc;
+  color: #1f4a63;
+  font-size: 12px;
+}
+
+.diamond-limit {
+  margin-bottom: 5px;
+  padding: 4px 6px;
+  border-left: 4px solid #c62f1d;
+  border-radius: 4px;
+  background: #fde8e4;
+  color: #6e1d12;
+}
+
+.diamond-limit-title {
+  font-weight: 700;
+}
+
+.diamond-limit-hint {
+  margin-top: 1px;
+  color: #7a3a2e;
+}
+
+.diamond-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 6px;
+  align-items: center;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.diamond-row-name {
+  font-weight: 600;
+}
+
+.diamond-row-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.diamond-store {
+  margin-left: 10px;
+  color: #3f6378;
+}
+
+.diamond-store .diamond-row-name {
+  font-weight: 400;
+}
+
+.diamond-store .diamond-row-name::before {
+  content: "▾ ";
+  color: #8fb3c7;
+}
+
+.diamond-meter {
+  grid-column: 1 / -1;
+  height: 4px;
+  margin-top: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #d3e4ee;
+}
+
+.diamond-meter span {
+  display: block;
+  height: 100%;
+  background: #5fc4e8;
+}
+
+.diamond-row.limit {
+  background: #fde8e4;
+  box-shadow: inset 3px 0 0 #c62f1d;
+  color: #6e1d12;
+}
+
+.diamond-row.limit .diamond-meter span {
+  background: #c62f1d;
+}
+
+.diamond-row.full {
+  background: #fff1dc;
+  color: #7a4a10;
+}
+
+.diamond-row.full .diamond-meter span {
+  background: #e08a1e;
+}
+
+.diamond-flow[hidden],
+.diamond-upgrades[hidden],
+.diamond-row[hidden],
+.diamond-meter[hidden] {
+  display: none;
+}
+
+.diamond-upgrades {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.diamond-group {
+  display: grid;
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid #cfe3ee;
+  border-radius: 6px;
+  background: #f6fbfd;
+}
+
+.diamond-group .build-status {
+  margin: 0;
+}
+
+.line-group {
+  border-color: #e3d6c3;
+  background: #fcf8f2;
+}
+
+.line-group[hidden] {
+  display: none;
+}
+
+.line-group .line-stage {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.line-group .diamond-steps span.on {
+  background: #d9862b;
+  box-shadow: 0 0 4px rgba(217, 134, 43, 0.7);
+}
+
+.diamond-steps {
+  display: flex;
+  gap: 4px;
+}
+
+.diamond-steps span {
+  width: 14px;
+  height: 6px;
+  border-radius: 3px;
+  background: #d6dee3;
+}
+
+.diamond-steps span.on {
+  background: #5fc4e8;
+  box-shadow: 0 0 4px rgba(95, 196, 232, 0.8);
+}
+
+@keyframes mythic-shift {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
 }
 
 .train-cap {
@@ -249,8 +490,39 @@ canvas {
 
 .train-dest[hidden],
 .train-cargo[hidden],
-.train-follow[hidden] {
+.train-follow[hidden],
+.train-sell[hidden] {
   display: none;
+}
+
+.train-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.train-sell {
+  margin-top: 4px;
+  padding: 4px 10px;
+  border: 1px solid #c9a29b;
+  border-radius: 6px;
+  background: #fff;
+  color: #9a2f22;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.train-sell:hover {
+  background: #fbeeec;
+}
+
+.train-sell.confirm {
+  border-color: #b8322a;
+  background: #b8322a;
+  color: #fff;
+  font-weight: 700;
 }
 
 .train-item.running .train-button:disabled {

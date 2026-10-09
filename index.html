@@ -35,9 +35,30 @@
           <div class="build-progress"><span id="build-smelter-bar"></span></div>
           <div id="build-smelter-status" class="build-status"></div>
           <button id="build-smelter" class="build-button" type="button"></button>
+          <div id="smelter-upgrade" class="smelter-upgrade" hidden>
+            <div id="smelter-stage" class="build-title"></div>
+            <div id="smelter-upgrade-desc" class="build-desc"></div>
+            <button id="smelter-upgrade-button" class="build-button" type="button"></button>
+          </div>
           <div id="smelter-jobs" hidden>
             <button id="smelt-steel" class="build-button" type="button"></button>
             <button id="smelt-goldbar" class="build-button" type="button"></button>
+            <div class="smelter-auto">
+              <label class="auto-toggle"><input id="smelt-auto" type="checkbox" /> Automatisch gießen</label>
+              <div class="auto-plan">
+                <span>Goldbarren</span>
+                <button type="button" data-recipe="goldbar" data-delta="-1" aria-label="Weniger Goldbarren">−</button>
+                <span id="plan-goldbar" class="auto-count">1</span>
+                <button type="button" data-recipe="goldbar" data-delta="1" aria-label="Mehr Goldbarren">+</button>
+              </div>
+              <div class="auto-plan">
+                <span>dann Stahl</span>
+                <button type="button" data-recipe="steel" data-delta="-1" aria-label="Weniger Stahl">−</button>
+                <span id="plan-steel" class="auto-count">2</span>
+                <button type="button" data-recipe="steel" data-delta="1" aria-label="Mehr Stahl">+</button>
+              </div>
+              <div id="smelt-auto-status" class="build-status"></div>
+            </div>
           </div>
         </div>
         <div id="build-platform-card" class="build-item">
@@ -47,12 +68,49 @@
           <div id="build-platform-status" class="build-status"></div>
           <button id="build-platform" class="build-button" type="button"></button>
         </div>
+        <div id="build-express-card" class="build-item">
+          <div class="build-title">Eigene Gleise für Gold und Eisen · 8 Kohle + 6 Eisenerz + 4 Golderz</div>
+          <div class="build-desc">
+            Gold bekommt eine eigene Zufahrt auf Gleis 3 und Eisen ein eigenes Ausfahrtsgleis. Keine Kreuzung mehr
+            am Westknoten, drei Züge fahren am Bahnhof nebeneinander.
+          </div>
+          <div class="build-progress"><span id="build-express-bar"></span></div>
+          <div id="build-express-status" class="build-status"></div>
+          <button id="build-express" class="build-button" type="button"></button>
+        </div>
+        <div id="build-siding-card" class="build-item">
+          <div class="build-title" id="siding-title">Zweigleisig</div>
+          <div class="build-desc" id="siding-desc"></div>
+          <div class="build-progress"><span id="build-siding-bar"></span></div>
+          <div id="build-siding-status" class="build-status"></div>
+          <button id="build-siding" class="build-button" type="button"></button>
+        </div>
+        <div id="build-lines-card" class="build-item lines-card">
+          <div class="build-title">Strecken & Züge ausbauen</div>
+          <div class="build-desc">
+            Jede Strecke hat Platz für eine bestimmte Zahl an Zügen, weitere warten im Depot. Bessere Züge bringen
+            mehr pro Fahrt, der Streckenausbau schafft Platz für mehr Züge.
+          </div>
+          <div id="line-upgrades" class="diamond-upgrades"></div>
+        </div>
         <div id="build-station-card" class="build-item">
           <div class="build-title" id="station-title">Bahnhof</div>
           <div class="build-desc" id="station-desc">Züge entladen hier Kohle, Eisen und Gold.</div>
           <div class="build-progress"><span id="build-station-bar"></span></div>
           <div id="build-station-status" class="build-status"></div>
           <button id="build-station" class="build-button" type="button"></button>
+        </div>
+        <div id="build-diamond-card" class="build-item diamond-card">
+          <div class="build-title">Diamantmine · 100 Goldbarren + 200 Stahl</div>
+          <div class="build-desc">
+            Eine lange Strecke zum Diamantberg im Osten. Oben am Berg gräbt die Mine, eine Materialseilbahn bringt
+            die Rohdiamanten in Kübeln hinunter zur Ladestation am Gleis.
+          </div>
+          <div class="build-progress"><span id="build-diamond-bar"></span></div>
+          <div id="build-diamond-status" class="build-status"></div>
+          <div id="diamond-flow" class="diamond-flow" hidden></div>
+          <button id="build-diamond" class="build-button" type="button"></button>
+          <div id="diamond-upgrades" class="diamond-upgrades" hidden></div>
         </div>
       </section>
       <section class="train-panel" aria-label="Züge">
@@ -65,6 +123,7 @@
       <button id="cam-coal" type="button">Kohlemine</button>
       <button id="cam-iron" type="button" hidden>Eisenmine</button>
       <button id="cam-gold" type="button" hidden>Goldmine</button>
+      <button id="cam-diamond" type="button" hidden>Diamantmine</button>
       <button id="cam-follow" type="button">Zug folgen</button>
       <label>
         Strecke
